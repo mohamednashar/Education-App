@@ -1,23 +1,40 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
+from PyQt5.QtCore import Qt
 
 class HomePage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        layout = QVBoxLayout()
+        main_layout = QVBoxLayout(self)
 
-        # Dashboard إحصائيات
+        # لوحة الإحصائيات على الشمال
         stats_layout = QHBoxLayout()
-        for text in ["عدد الزوار: 100", "عدد الصفحات: 10", "عدد الملفات: 25"]:
-            lbl = QLabel(text)
-            lbl.setFont(QFont("Arial", 14))
-            lbl.setStyleSheet("background-color:#e0f7fa; padding:10px; border-radius:5px;")
-            stats_layout.addWidget(lbl)
-        layout.addLayout(stats_layout)
+        stats_layout.setAlignment(Qt.AlignLeft)
 
-        # مساحة الملفات
+        stats = [
+            ("عدد الزوار", "100", "#ffe0b2"),
+            ("عدد الصفحات", "10", "#b2dfdb"),
+            ("عدد الملفات", "25", "#c5cae9")
+        ]
+
+        for name, value, color in stats:
+            lbl = QLabel(f"{name}: {value}")
+            lbl.setFont(QFont("Arial", 14))
+            lbl.setStyleSheet(f"""
+                background-color:{color};
+                padding:10px;
+                border-radius:5px;
+                margin-right:10px;
+            """)
+            stats_layout.addWidget(lbl)
+
+        main_layout.addLayout(stats_layout)
+
+        # مربع صغير للملفات فوق الشمال
+        files_group = QGroupBox("الملفات")
+        files_group.setFixedSize(500, 200)  # مربع صغير
         files_layout = QHBoxLayout()
+
         files = [
             ("PDF", "#ffcdd2"),
             ("Word", "#d1c4e9"),
@@ -25,9 +42,15 @@ class HomePage(QWidget):
         ]
         for name, color in files:
             btn = QPushButton(name)
-            btn.setFixedSize(150, 150)
-            btn.setStyleSheet(f"background-color:{color}; font-size:16px; border-radius:10px;")
+            btn.setFixedSize(120, 120)
+            btn.setStyleSheet(f"""
+                background-color:{color};
+                font-size:16px;
+                border-radius:10px;
+            """)
             files_layout.addWidget(btn)
-        layout.addLayout(files_layout)
 
-        self.setLayout(layout)
+        files_group.setLayout(files_layout)
+        main_layout.addWidget(files_group, alignment=Qt.AlignLeft)
+
+        self.setLayout(main_layout)

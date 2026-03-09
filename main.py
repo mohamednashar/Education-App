@@ -1,9 +1,8 @@
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt
 
-# استيراد الصفحات
 from pages.home_page import HomePage
 from pages.stages_page import StagesPage
 from pages.classes_page import ClassesPage
@@ -18,10 +17,10 @@ class MainWindow(QWidget):
         self.setWindowTitle("التطبيق التعليمي")
         self.resize(1300, 750)
 
-        main_layout = QHBoxLayout()
-        self.stack = QStackedWidget()
+        main_layout = QHBoxLayout(self)
 
-        # الصفحات
+        # Stack للصفحات
+        self.stack = QStackedWidget()
         self.pages = [
             HomePage(self),
             StagesPage(self),
@@ -34,7 +33,7 @@ class MainWindow(QWidget):
         for p in self.pages:
             self.stack.addWidget(p)
 
-        # Sidebar Menu
+        # Sidebar Menu على اليمين
         menu_layout = QVBoxLayout()
         buttons = [
             ("الصفحة الرئيسية", "resources/icons/home.png"),
@@ -52,7 +51,7 @@ class MainWindow(QWidget):
             btn.setIcon(QIcon(icon_path))
             btn.setStyleSheet("""
                 QPushButton {
-                    padding: 10px;
+                    padding: 12px;
                     text-align: left;
                     font-size: 16px;
                 }
@@ -62,9 +61,8 @@ class MainWindow(QWidget):
             """)
             btn.clicked.connect(lambda checked, index=i: self.stack.setCurrentIndex(index))
             menu_layout.addWidget(btn)
-            self.menu_buttons[text] = btn
 
-        menu_layout.addStretch()
+        menu_layout.addStretch()  # يخلي المنيو واصل لاخر الصفحة
         menu_widget = QWidget()
         menu_widget.setLayout(menu_layout)
         menu_widget.setFixedWidth(220)
